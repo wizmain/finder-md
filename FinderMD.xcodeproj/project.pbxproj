@@ -20,7 +20,6 @@
 		8049D3532EA7A1FC992E6D2D /* ExtensionStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240FC258E3F09BE9069741FD /* ExtensionStatusView.swift */; };
 		B3ADFDB903A59052F07DCE54 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7220D2C68FA233D6CF0917 /* PreviewViewController.swift */; };
 		D1B1D90ABC64A87E7742B980 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CADBA398014672D2605600EA /* Quartz.framework */; };
-		D33000B1D90D2599855E83C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BCB26E9D2D4292F3E688669F /* Assets.xcassets */; };
 		F2AEAED197DB8A5E9933AF6D /* MarkdownShared in Frameworks */ = {isa = PBXBuildFile; productRef = 09C3A5AFF36B054624BCAE4E /* MarkdownShared */; };
 		FF5C6BCCED96C2283FE8922B /* MarkdownShared in Frameworks */ = {isa = PBXBuildFile; productRef = 2E32E581FA5047CC37418680 /* MarkdownShared */; };
 /* End PBXBuildFile section */
@@ -70,7 +69,6 @@
 		A0983966C30B2926236C6C8A /* ThemeSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSettingsView.swift; sourceTree = "<group>"; };
 		AF4F19274ACC923062DE0FFF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B7DDADA5F05AF9795F9C48CA /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
-		BCB26E9D2D4292F3E688669F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C1E934B47E68FD7295C24D73 /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
 		C28A4726881D9608DC88CFEB /* QuickLookExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickLookExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		CADBA398014672D2605600EA /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
@@ -178,7 +176,6 @@
 		A88848637EA82683AB82AFCE /* FinderMD */ = {
 			isa = PBXGroup;
 			children = (
-				BCB26E9D2D4292F3E688669F /* Assets.xcassets */,
 				F6DF8B1EC5C0D6100601C9B1 /* Info.plist */,
 				288D4045FC55F649585A3886 /* App */,
 				797762139840D3D5C397C5E4 /* Models */,
@@ -249,7 +246,6 @@
 			buildConfigurationList = 334BAA6546348828A6E60A8F /* Build configuration list for PBXNativeTarget "FinderMD" */;
 			buildPhases = (
 				01D80EFFDBE84722FEA505E9 /* Sources */,
-				350C804BA85FD8CD1E86B575 /* Resources */,
 				3E03F8990F331469EE352759 /* Frameworks */,
 				FF954CEE9E8ED3BCAE2314D9 /* Embed Foundation Extensions */,
 			);
@@ -313,17 +309,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXResourcesBuildPhase section */
-		350C804BA85FD8CD1E86B575 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D33000B1D90D2599855E83C8 /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		01D80EFFDBE84722FEA505E9 /* Sources */ = {
