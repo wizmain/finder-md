@@ -1,31 +1,38 @@
-import QuickLook
-import UIKit
-import WebKit
+import Quartz
+import UniformTypeIdentifiers
+import MarkdownShared
 
-final class PreviewViewController: UIViewController, QLPreviewingController {
-    private let webView = WKWebView(frame: .zero)
-    private let renderer = MarkdownRenderer()
+final class PreviewProvider: QLPreviewProvider, QLPreviewingController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        webView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(webView)
-        NSLayoutConstraint.activate([
-            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            webView.topAnchor.constraint(equalTo: view.topAnchor),
-            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+    private let renderer = HTMLRenderer()
+
+    /// App Group suite name (must match FinderMD companion app).
+    private static let suiteName = "group.com.findermd.shared"
+
+    func providePreview(for request: QLFilePreviewRequest, completionHandler handler: @escaping (QLPreviewReply?, Error?) -> Void) {
+        let configuration = Self.loadConfiguration()
+        do {
+            let html = try renderer.render(fileURL: request.fileURL, configuration: configuration)
+            let data = Data(html.utf8)
+            let reply = QLPreviewReply(dataOfContentType: UTType.html, contentSize: CGSize(width: 800, height: 1200)) { _ in
+                return data
+            }
+            reply.stringEncoding = String.Encoding.utf8
+            reply.title = request.fileURL.deletingPathExtension().lastPathComponent
+            handler(reply, nil)
+        } catch {
+            handler(nil, error)
+        }
     }
 
-    func preparePreviewOfFile(at url: URL, completionHandler handler: @escaping (Error?) -> Void) {
-        do {
-            let markdown = try String(contentsOf: url, encoding: .utf8)
-            let html = try renderer.render(markdown: markdown, sourceURL: url)
-            webView.loadHTMLString(html, baseURL: url.deletingLastPathComponent())
-            handler(nil)
-        } catch {
-            handler(error)
+    /// Read user preferences from shared App Group UserDefaults.
+    private static func loadConfiguration() -> RenderConfiguration {
+        var config = RenderConfiguration.quickLook
+        let defaults = UserDefaults(suiteName: suiteName)
+        if let raw = defaults?.string(forKey: "selectedTheme"),
+           let theme = Theme(rawValue: raw) {
+            config.theme = theme
         }
+        return config
     }
 }

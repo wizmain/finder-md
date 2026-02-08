@@ -77,12 +77,26 @@ public struct ImageResolver {
         return "data:\(mimeType);base64,\(base64)"
     }
 
+    // MARK: - Remote Image Download
+
+    /// Downloads a remote image and returns a base64 data URI.
+    /// Returns `nil` on failure or timeout.
+    private func downloadRemoteImageAsDataURI(_ urlString: String) -> String? {
+        guard let url = URL(string: urlString) else { return nil }
+        guard let data = try? Data(contentsOf: url) else { return nil }
+
+        let ext = url.pathExtension
+        let mimeType = ext.isEmpty ? "image/png" : Self.mimeType(for: ext)
+        let base64 = data.base64EncodedString()
+        return "data:\(mimeType);base64,\(base64)"
+    }
+
     // MARK: - HTML Image Replacement
 
     /// Replaces `<img src="...">` in HTML with resolved paths or data URIs.
     /// - Parameters:
     ///   - html: The HTML content to process.
-    ///   - embedImages: If `true`, replaces with base64 data URIs. If `false`, replaces with file:// URLs.
+    ///   - embedImages: If `true`, replaces with base64 data URIs (including remote images). If `false`, replaces with file:// URLs.
     /// - Returns: HTML with resolved image sources.
     public func resolveImagesInHTML(_ html: String, embedImages: Bool) -> String {
         // Match <img ... src="..." ...> patterns
@@ -106,7 +120,13 @@ public struct ImageResolver {
 
             let replacement: String?
             if embedImages {
-                replacement = try? resolveToDataURI(source)
+                let isRemote = source.lowercased().hasPrefix("http://")
+                    || source.lowercased().hasPrefix("https://")
+                if isRemote {
+                    replacement = downloadRemoteImageAsDataURI(source)
+                } else {
+                    replacement = try? resolveToDataURI(source)
+                }
             } else {
                 replacement = (try? resolve(source))?.absoluteString
             }

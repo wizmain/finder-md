@@ -149,8 +149,18 @@
 }
 
 .markdown-body input[type="checkbox"] {
-    margin: 0 0.2em 0.25em -1.4em;
+    margin: 0 0.35em 0 -1.4em;
     vertical-align: middle;
+    position: relative;
+    top: 1px;
+}
+
+.markdown-body li > input[type="checkbox"] + p {
+    display: inline;
+}
+
+.markdown-body li:has(> input[type="checkbox"]) {
+    list-style: none;
 }
 
 .markdown-body del {

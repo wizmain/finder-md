@@ -4,20 +4,36 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             List {
-                NavigationLink("Extension Status") {
-                    ExtensionStatusView()
+                Section("Settings") {
+                    NavigationLink {
+                        ThemeSettingsView()
+                    } label: {
+                        Label("Theme", systemImage: "paintbrush")
+                    }
+                    NavigationLink {
+                        FontSettingsView()
+                    } label: {
+                        Label("Font", systemImage: "textformat.size")
+                    }
                 }
-                NavigationLink("Theme") {
-                    ThemeSettingsView()
+                Section("Extensions") {
+                    NavigationLink {
+                        ExtensionStatusView()
+                    } label: {
+                        Label("Extension Status", systemImage: "puzzlepiece.extension")
+                    }
                 }
-                NavigationLink("Font") {
-                    FontSettingsView()
+                Section("Preview") {
+                    NavigationLink {
+                        PreviewView()
+                    } label: {
+                        Label("Markdown Preview", systemImage: "doc.richtext")
+                    }
                 }
             }
             .navigationTitle("Finder MD")
         } detail: {
-            Text("Select a setting")
-                .foregroundStyle(.secondary)
+            PreviewView()
         }
     }
 }

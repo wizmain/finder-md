@@ -1,0 +1,142 @@
+name: FinderMD
+options:
+  bundleIdPrefix: com.findermd
+  deploymentTarget:
+    macOS: "14.0"
+  xcodeVersion: "16.2"
+  generateEmptyDirectories: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.10"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    CODE_SIGN_STYLE: Automatic
+    DEVELOPMENT_TEAM: 23VMB3S28N
+
+packages:
+  MarkdownShared:
+    path: MarkdownShared
+
+targets:
+
+  # ── Companion App ──
+  FinderMD:
+    type: application
+    platform: macOS
+    sources:
+      - path: FinderMD
+        excludes:
+          - "**/*.entitlements"
+    info:
+      path: FinderMD/Info.plist
+      properties:
+        CFBundleDisplayName: Finder MD
+        LSApplicationCategoryType: public.app-category.utilities
+        LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+    entitlements:
+      path: FinderMD/FinderMD.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.application-groups:
+          - group.com.findermd.shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.findermd.app
+    dependencies:
+      - package: MarkdownShared
+      - target: QuickLookExtension
+        embed: true
+        codeSign: true
+      - target: ThumbnailExtension
+        embed: true
+        codeSign: true
+
+  # ── Quick Look Extension ──
+  QuickLookExtension:
+    type: app-extension
+    platform: macOS
+    sources:
+      - path: QuickLookExtension
+        excludes:
+          - "**/*.entitlements"
+    info:
+      path: QuickLookExtension/Info.plist
+      properties:
+        NSExtension:
+          NSExtensionAttributes:
+            QLIsDataBasedPreview: true
+            QLSupportedContentTypes:
+              - net.daringfireball.markdown
+            QLSupportsSearchableItems: true
+          NSExtensionPointIdentifier: com.apple.quicklook.preview
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PreviewProvider
+    entitlements:
+      path: QuickLookExtension/QuickLookExtension.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.network.client: true
+        com.apple.security.files.user-selected.read-only: true
+        com.apple.security.temporary-exception.files.absolute-path.read-only:
+          - /
+        com.apple.security.application-groups:
+          - group.com.findermd.shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.findermd.app.quicklook
+        LD_RUNPATH_SEARCH_PATHS:
+          - $(inherited)
+          - "@executable_path/../Frameworks"
+          - "@executable_path/../../../../Frameworks"
+    dependencies:
+      - package: MarkdownShared
+      - sdk: Quartz.framework
+
+  # ── Thumbnail Extension ──
+  ThumbnailExtension:
+    type: app-extension
+    platform: macOS
+    sources:
+      - path: ThumbnailExtension
+        excludes:
+          - "**/*.entitlements"
+    info:
+      path: ThumbnailExtension/Info.plist
+      properties:
+        NSExtension:
+          NSExtensionAttributes:
+            QLSupportedContentTypes:
+              - net.daringfireball.markdown
+            QLThumbnailMinimumDimension: 64
+          NSExtensionPointIdentifier: com.apple.quicklook.thumbnail
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ThumbnailProvider
+    entitlements:
+      path: ThumbnailExtension/ThumbnailExtension.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.application-groups:
+          - group.com.findermd.shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.findermd.app.thumbnail
+        LD_RUNPATH_SEARCH_PATHS:
+          - $(inherited)
+          - "@executable_path/../Frameworks"
+          - "@executable_path/../../../../Frameworks"
+    dependencies:
+      - package: MarkdownShared
+
+schemes:
+  FinderMD:
+    build:
+      targets:
+        FinderMD: all
+        QuickLookExtension: all
+        ThumbnailExtension: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+    archive:
+      config: Release

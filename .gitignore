@@ -1,2 +1,13 @@
 # Worktrees
 agent-*/
+
+# macOS
+.DS_Store
+
+# SPM
+.build/
+.swiftpm/
+
+# Xcode
+xcuserdata/
+*.xcscmblueprint
