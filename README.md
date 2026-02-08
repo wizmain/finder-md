@@ -15,11 +15,7 @@ macOS Finder Quick Look extension for beautifully rendered Markdown previews —
 
 ## Screenshots
 
-<!-- TODO: Add screenshots -->
-
-| Quick Look Preview | Thumbnail | Companion App |
-|---|---|---|
-| ![Preview](docs/screenshots/preview.png) | ![Thumbnail](docs/screenshots/thumbnail.png) | ![App](docs/screenshots/app.png) |
+> Screenshots will be added after the first release.
 
 ## System Requirements
 
@@ -29,7 +25,7 @@ macOS Finder Quick Look extension for beautifully rendered Markdown previews —
 
 ## Installation
 
-1. Download the latest `.dmg` from [Releases](https://github.com/user/finder-md/releases)
+1. Download the latest `.dmg` from [Releases](https://github.com/wizmain/finder-md/releases)
 2. Open the DMG and drag **Finder MD.app** to `/Applications`
 3. Launch **Finder MD** once to register the extensions
 4. Enable the extensions:
