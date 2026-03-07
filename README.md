@@ -11,7 +11,7 @@ macOS Finder Quick Look extension for beautifully rendered Markdown previews —
 - **4 Themes** — github-light, github-dark, dracula, nord
 - **Dark Mode** — automatically follows system appearance
 - **Thumbnail Generation** — Markdown file thumbnails in Finder
-- **Image Embedding** — local and remote images resolved and embedded inline
+- **Image Embedding** — local (including `../` relative paths) and remote images resolved and embedded inline
 
 ## Screenshots
 
