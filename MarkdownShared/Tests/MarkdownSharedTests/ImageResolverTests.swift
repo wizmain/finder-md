@@ -29,79 +29,64 @@ final class ImageResolverTests: XCTestCase {
 
     // MARK: - Path Resolution
 
-    func testResolveRelativePath() throws {
-        let url = try resolver.resolve("images/test.png")
+    func testResolveRelativePath() {
+        let url = resolver.resolve("images/test.png")
         XCTAssertNotNil(url)
         XCTAssertEqual(url?.lastPathComponent, "test.png")
         XCTAssertTrue(url!.path.hasPrefix(tempDir.path))
     }
 
-    func testResolveAbsolutePathWithinBase() throws {
+    func testResolveAbsolutePathWithinBase() {
         let absolutePath = tempDir.appendingPathComponent("root.jpg").path
-        let url = try resolver.resolve(absolutePath)
+        let url = resolver.resolve(absolutePath)
         XCTAssertNotNil(url)
         XCTAssertEqual(url?.lastPathComponent, "root.jpg")
     }
 
-    func testResolveRemoteURLReturnsNil() throws {
-        let url = try resolver.resolve("https://example.com/image.png")
+    func testResolveRemoteURLReturnsNil() {
+        let url = resolver.resolve("https://example.com/image.png")
         XCTAssertNil(url)
     }
 
-    func testResolveHTTPURLReturnsNil() throws {
-        let url = try resolver.resolve("http://example.com/image.png")
+    func testResolveHTTPURLReturnsNil() {
+        let url = resolver.resolve("http://example.com/image.png")
         XCTAssertNil(url)
     }
 
-    func testResolveDataURIReturnsNil() throws {
-        let url = try resolver.resolve("data:image/png;base64,abc123")
+    func testResolveDataURIReturnsNil() {
+        let url = resolver.resolve("data:image/png;base64,abc123")
         XCTAssertNil(url)
     }
 
-    // MARK: - Security: Directory Traversal Prevention
+    // MARK: - Parent Directory Traversal (allowed, sandbox provides security)
 
-    func testDirectoryTraversalBlocked() {
-        XCTAssertThrowsError(try resolver.resolve("../../etc/passwd")) { error in
-            guard case ImageResolverError.directoryTraversalBlocked = error else {
-                XCTFail("Expected directoryTraversalBlocked, got \(error)")
-                return
-            }
-        }
+    func testParentDirectoryTraversalAllowed() {
+        let url = resolver.resolve("../sibling/image.png")
+        XCTAssertNotNil(url)
+        XCTAssertEqual(url?.lastPathComponent, "image.png")
     }
 
-    func testDirectoryTraversalWithDoubleDots() {
-        XCTAssertThrowsError(try resolver.resolve("images/../../etc/shadow")) { error in
-            guard case ImageResolverError.directoryTraversalBlocked = error else {
-                XCTFail("Expected directoryTraversalBlocked, got \(error)")
-                return
-            }
-        }
-    }
-
-    func testAbsolutePathOutsideBaseBlocked() {
-        XCTAssertThrowsError(try resolver.resolve("/etc/passwd")) { error in
-            guard case ImageResolverError.directoryTraversalBlocked = error else {
-                XCTFail("Expected directoryTraversalBlocked, got \(error)")
-                return
-            }
-        }
+    func testAbsolutePathOutsideBaseAllowed() {
+        let url = resolver.resolve("/tmp/image.png")
+        XCTAssertNotNil(url)
+        XCTAssertEqual(url?.path, "/tmp/image.png")
     }
 
     // MARK: - Data URI Conversion
 
-    func testResolveToDataURI() throws {
-        let dataURI = try resolver.resolveToDataURI("images/test.png")
+    func testResolveToDataURI() {
+        let dataURI = resolver.resolveToDataURI("images/test.png")
         XCTAssertNotNil(dataURI)
         XCTAssertTrue(dataURI!.hasPrefix("data:image/png;base64,"))
     }
 
-    func testResolveToDataURINonexistentFile() throws {
-        let dataURI = try resolver.resolveToDataURI("missing.png")
+    func testResolveToDataURINonexistentFile() {
+        let dataURI = resolver.resolveToDataURI("missing.png")
         XCTAssertNil(dataURI)
     }
 
-    func testResolveToDataURIRemoteURL() throws {
-        let dataURI = try resolver.resolveToDataURI("https://example.com/img.png")
+    func testResolveToDataURIRemoteURL() {
+        let dataURI = resolver.resolveToDataURI("https://example.com/img.png")
         XCTAssertNil(dataURI)
     }
 
@@ -127,11 +112,12 @@ final class ImageResolverTests: XCTestCase {
         XCTAssertTrue(result.contains("https://example.com/img.png"))
     }
 
-    func testResolveImagesSkipsTraversalAttempts() {
-        let html = #"<img src="../../etc/passwd" alt="hack">"#
+    func testResolveImagesHandlesParentTraversal() {
+        let html = #"<img src="../images/graph.png" alt="graph">"#
         let result = resolver.resolveImagesInHTML(html, embedImages: false)
-        // Traversal attempts should be left untouched (resolve throws, replacement is nil)
-        XCTAssertTrue(result.contains("../../etc/passwd"))
+        // Parent traversal is resolved to file:// URL
+        XCTAssertTrue(result.contains("file://"))
+        XCTAssertTrue(result.contains("graph.png"))
     }
 
     func testResolveMultipleImages() {

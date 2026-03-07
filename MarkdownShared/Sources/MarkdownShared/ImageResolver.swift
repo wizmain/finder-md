@@ -2,7 +2,6 @@ import Foundation
 
 /// Errors that can occur during image resolution.
 public enum ImageResolverError: Error, Equatable {
-    case directoryTraversalBlocked(String)
     case unsupportedScheme(String)
     case fileNotFound(String)
 }
@@ -21,9 +20,9 @@ public struct ImageResolver {
     // MARK: - Path Resolution
 
     /// Resolves an image source path to a file URL.
-    /// Returns `nil` for remote URLs (http/https) or invalid paths.
-    /// Throws for directory traversal attempts.
-    public func resolve(_ source: String) throws -> URL? {
+    /// Returns `nil` for remote URLs (http/https) or data URIs.
+    /// Security is delegated to the OS sandbox (Quick Look extension sandbox).
+    public func resolve(_ source: String) -> URL? {
         // Skip remote URLs
         if source.lowercased().hasPrefix("http://") || source.lowercased().hasPrefix("https://") {
             return nil
@@ -34,33 +33,21 @@ public struct ImageResolver {
             return nil
         }
 
-        let fileURL: URL
         if source.hasPrefix("/") {
             // Absolute path
-            fileURL = URL(fileURLWithPath: source).standardized
+            return URL(fileURLWithPath: source).standardized
         } else {
-            // Relative path
-            fileURL = baseDirectory.appendingPathComponent(source).standardized
+            // Relative path (supports ../ traversal for sibling directories)
+            return baseDirectory.appendingPathComponent(source).standardized
         }
-
-        // Security: prevent directory traversal
-        let resolvedPath = fileURL.path
-        let basePath = baseDirectory.path
-
-        guard resolvedPath.hasPrefix(basePath) else {
-            throw ImageResolverError.directoryTraversalBlocked(source)
-        }
-
-        return fileURL
     }
 
     // MARK: - Data URI Conversion
 
     /// Resolves an image source to a base64 data URI string.
     /// Returns `nil` if the file doesn't exist or is a remote URL.
-    /// Throws for directory traversal attempts.
-    public func resolveToDataURI(_ source: String) throws -> String? {
-        guard let fileURL = try resolve(source) else {
+    public func resolveToDataURI(_ source: String) -> String? {
+        guard let fileURL = resolve(source) else {
             return nil
         }
 
@@ -125,10 +112,10 @@ public struct ImageResolver {
                 if isRemote {
                     replacement = downloadRemoteImageAsDataURI(source)
                 } else {
-                    replacement = try? resolveToDataURI(source)
+                    replacement = resolveToDataURI(source)
                 }
             } else {
-                replacement = (try? resolve(source))?.absoluteString
+                replacement = resolve(source)?.absoluteString
             }
 
             if let replacement = replacement {
