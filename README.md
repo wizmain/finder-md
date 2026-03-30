@@ -1,21 +1,27 @@
 # FinderMD
 
-macOS Finder Quick Look extension for beautifully rendered Markdown previews — right from Finder.
+macOS Finder Quick Look extension for beautifully rendered Markdown and HWPX document previews — right from Finder.
 
 ## Features
 
+### Markdown Preview
 - **GitHub Flavored Markdown** — tables, task lists, strikethrough, autolinks
 - **Syntax Highlighting** — 30+ languages via highlight.js
 - **Mermaid Diagrams** — flowcharts, sequence diagrams, Gantt charts, and more
 - **KaTeX Math** — inline and display math expressions
-- **4 Themes** — github-light, github-dark, dracula, nord
-- **Dark Mode** — automatically follows system appearance
-- **Thumbnail Generation** — Markdown file thumbnails in Finder
 - **Image Embedding** — local (including `../` relative paths) and remote images resolved and embedded inline
 
-## Screenshots
+### HWPX Preview (한컴 문서)
+- **HWPX 파일 미리보기** — 한컴오피스 한글 문서를 Finder에서 바로 미리보기
+- **스타일 렌더링** — 굵기, 기울임, 폰트 크기, 색상, 정렬
+- **테이블 지원** — 셀 병합 포함
+- **이미지 임베딩** — BinData 이미지를 base64로 인라인 렌더링
+- **다중 섹션** — 여러 섹션으로 구성된 문서 지원
 
-> Screenshots will be added after the first release.
+### 공통
+- **4 Themes** — github-light, github-dark, dracula, nord
+- **Dark Mode** — automatically follows system appearance
+- **Thumbnail Generation** — file thumbnails in Finder
 
 ## System Requirements
 
@@ -37,32 +43,40 @@ macOS Finder Quick Look extension for beautifully rendered Markdown previews —
 ```
 finder-md/
 ├── scripts/
-│   ├── build-release.sh          # Release build & DMG packaging
-│   └── ExportOptions.plist       # Code signing export options
-└── agent-claude-code/
-    ├── project.yml               # XcodeGen project configuration
-    ├── FinderMD/                 # Companion App (SwiftUI)
-    │   ├── App/                  #   App entry point & main view
-    │   ├── Models/               #   Settings model
-    │   └── Views/                #   Preview, theme, font settings
-    ├── QuickLookExtension/       # Quick Look Preview Extension
-    │   └── PreviewViewController.swift
-    ├── ThumbnailExtension/       # Thumbnail Generation Extension
-    │   └── ThumbnailProvider.swift
-    └── MarkdownShared/           # Shared Swift Package
-        ├── Package.swift
-        ├── Sources/MarkdownShared/
-        │   ├── MarkdownParser.swift    # Markdown → HTML conversion
-        │   ├── HTMLRenderer.swift      # Full HTML document rendering
-        │   ├── ImageResolver.swift     # Image path resolution & embedding
-        │   ├── ThemeManager.swift      # Theme loading & dark mode
-        │   └── Resources/
-        │       ├── template.html       # HTML template
-        │       ├── themes/             # 4 CSS theme files
-        │       ├── js/                 # highlight.js, mermaid.js, katex.js
-        │       ├── css/                # Syntax & math stylesheets
-        │       └── fonts/              # KaTeX woff2 fonts
-        └── Tests/MarkdownSharedTests/
+│   ├── build-release.sh              # Release build & DMG packaging
+│   └── ExportOptions.plist           # Code signing export options
+├── project.yml                       # XcodeGen project configuration
+├── FinderMD/                         # Companion App (SwiftUI)
+│   ├── App/                          #   App entry point & main view
+│   ├── Models/                       #   Settings model
+│   └── Views/                        #   Preview, theme, font settings
+├── QuickLookExtension/               # Markdown Quick Look Extension
+│   └── PreviewViewController.swift
+├── ThumbnailExtension/               # Markdown Thumbnail Extension
+│   └── ThumbnailProvider.swift
+├── HWPXQuickLookExtension/           # HWPX Quick Look Extension
+│   └── HWPXPreviewProvider.swift
+├── HWPXThumbnailExtension/           # HWPX Thumbnail Extension
+│   └── HWPXThumbnailProvider.swift
+├── MarkdownShared/                   # Shared Markdown Package (SPM)
+│   ├── Package.swift
+│   ├── Sources/MarkdownShared/
+│   │   ├── MarkdownParser.swift      #   Markdown → HTML conversion
+│   │   ├── HTMLRenderer.swift        #   Full HTML document rendering
+│   │   ├── ImageResolver.swift       #   Image path resolution & embedding
+│   │   ├── ThemeManager.swift        #   Theme loading & dark mode
+│   │   └── Resources/               #   template, themes, JS, CSS, fonts
+│   └── Tests/MarkdownSharedTests/
+└── HWPXShared/                       # Shared HWPX Package (SPM)
+    ├── Package.swift
+    ├── Sources/HWPXShared/
+    │   ├── HWPXParser.swift          #   Entry point: ZIP → parse → HTML
+    │   ├── HWPXArchive.swift         #   ZIP reading (ZIPFoundation)
+    │   ├── HWPXDocument.swift        #   Document model types
+    │   ├── SectionParser.swift       #   Section XML → document model
+    │   ├── HeaderParser.swift        #   Header XML → styles & fonts
+    │   └── HWPXHTMLGenerator.swift   #   Document model → HTML
+    └── Tests/HWPXSharedTests/
 ```
 
 ### Targets
@@ -71,8 +85,11 @@ finder-md/
 |---|---|---|---|
 | **FinderMD** | App | `com.findermd.app` | Companion app for settings & extension management |
 | **QuickLookExtension** | App Extension | `com.findermd.app.quicklook` | Renders Markdown preview on Spacebar |
-| **ThumbnailExtension** | App Extension | `com.findermd.app.thumbnail` | Generates Finder thumbnail icons |
+| **ThumbnailExtension** | App Extension | `com.findermd.app.thumbnail` | Generates Markdown thumbnails in Finder |
+| **HWPXQuickLookExtension** | App Extension | `com.findermd.app.hwpx-quicklook` | Renders HWPX preview on Spacebar |
+| **HWPXThumbnailExtension** | App Extension | `com.findermd.app.hwpx-thumbnail` | Generates HWPX thumbnails in Finder |
 | **MarkdownShared** | SPM Package | — | Shared Markdown parsing & rendering library |
+| **HWPXShared** | SPM Package | — | Shared HWPX parsing & rendering library |
 
 ## Development
 
@@ -84,8 +101,6 @@ finder-md/
 ### Build
 
 ```bash
-cd agent-claude-code
-
 # Generate Xcode project
 xcodegen generate
 
@@ -98,21 +113,25 @@ open FinderMD.xcodeproj
 ### Run Tests
 
 ```bash
-cd agent-claude-code/MarkdownShared
-swift test
+# Markdown tests (75 tests)
+swift test --package-path MarkdownShared
+
+# HWPX tests (33 tests)
+swift test --package-path HWPXShared
 ```
 
-### Testing Quick Look Extension
+### Testing Quick Look Extensions
 
 > `qlmanage -p` does **not** work with data-based Quick Look extensions. You must test via Finder.
 
 1. Build and run the app from Xcode
-2. Open Finder and navigate to a `.md` file
+2. Open Finder and navigate to a `.md` or `.hwpx` file
 3. Press **Spacebar** to trigger Quick Look preview
 
 To force-reload after rebuilding:
 ```bash
-killall QuickLookExtension 2>/dev/null; killall Finder
+qlmanage -r
+killall Finder
 ```
 
 ## Release Build
@@ -147,10 +166,13 @@ The active theme automatically switches between light/dark variants based on the
 
 ## Dependencies
 
-- [swift-markdown](https://github.com/swiftlang/swift-markdown) — Apple's Swift Markdown parser
-- [highlight.js](https://highlightjs.org/) — Syntax highlighting
-- [Mermaid](https://mermaid.js.org/) — Diagram rendering
-- [KaTeX](https://katex.org/) — Math typesetting
+| Package | Purpose |
+|---|---|
+| [swift-markdown](https://github.com/swiftlang/swift-markdown) | Apple's Swift Markdown parser |
+| [ZIPFoundation](https://github.com/weichsel/ZIPFoundation) | HWPX ZIP archive reading |
+| [highlight.js](https://highlightjs.org/) | Syntax highlighting |
+| [Mermaid](https://mermaid.js.org/) | Diagram rendering |
+| [KaTeX](https://katex.org/) | Math typesetting |
 
 ## License
 
