@@ -18,6 +18,8 @@ settings:
 packages:
   MarkdownShared:
     path: MarkdownShared
+  HWPXShared:
+    path: HWPXShared
 
 targets:
 
@@ -35,6 +37,16 @@ targets:
         CFBundleDisplayName: Finder MD
         LSApplicationCategoryType: public.app-category.utilities
         LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+        UTImportedTypeDeclarations:
+          - UTTypeIdentifier: org.hancom.hwpx
+            UTTypeDescription: HWPX Document
+            UTTypeConformsTo:
+              - public.data
+            UTTypeTagSpecification:
+              public.filename-extension:
+                - hwpx
+              public.mime-type:
+                - application/haansofthwpx
     entitlements:
       path: FinderMD/FinderMD.entitlements
       properties:
@@ -52,8 +64,14 @@ targets:
       - target: ThumbnailExtension
         embed: true
         codeSign: true
+      - target: HWPXQuickLookExtension
+        embed: true
+        codeSign: true
+      - target: HWPXThumbnailExtension
+        embed: true
+        codeSign: true
 
-  # ── Quick Look Extension ──
+  # ── Quick Look Extension (Markdown) ──
   QuickLookExtension:
     type: app-extension
     platform: macOS
@@ -93,7 +111,7 @@ targets:
       - package: MarkdownShared
       - sdk: Quartz.framework
 
-  # ── Thumbnail Extension ──
+  # ── Thumbnail Extension (Markdown) ──
   ThumbnailExtension:
     type: app-extension
     platform: macOS
@@ -127,6 +145,83 @@ targets:
     dependencies:
       - package: MarkdownShared
 
+  # ── Quick Look Extension (HWPX) ──
+  HWPXQuickLookExtension:
+    type: app-extension
+    platform: macOS
+    sources:
+      - path: HWPXQuickLookExtension
+        excludes:
+          - "**/*.entitlements"
+    info:
+      path: HWPXQuickLookExtension/Info.plist
+      properties:
+        NSExtension:
+          NSExtensionAttributes:
+            QLIsDataBasedPreview: true
+            QLSupportedContentTypes:
+              - org.hancom.hwpx
+              - com.haansoft.hancomofficeviewer.mac.hwpx
+            QLSupportsSearchableItems: false
+          NSExtensionPointIdentifier: com.apple.quicklook.preview
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).HWPXPreviewProvider
+    entitlements:
+      path: HWPXQuickLookExtension/HWPXQuickLookExtension.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.files.user-selected.read-only: true
+        com.apple.security.temporary-exception.files.absolute-path.read-only:
+          - /
+        com.apple.security.application-groups:
+          - group.com.findermd.shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.findermd.app.hwpx-quicklook
+        LD_RUNPATH_SEARCH_PATHS:
+          - $(inherited)
+          - "@executable_path/../Frameworks"
+          - "@executable_path/../../../../Frameworks"
+    dependencies:
+      - package: HWPXShared
+      - package: MarkdownShared
+      - sdk: Quartz.framework
+
+  # ── Thumbnail Extension (HWPX) ──
+  HWPXThumbnailExtension:
+    type: app-extension
+    platform: macOS
+    sources:
+      - path: HWPXThumbnailExtension
+        excludes:
+          - "**/*.entitlements"
+    info:
+      path: HWPXThumbnailExtension/Info.plist
+      properties:
+        NSExtension:
+          NSExtensionAttributes:
+            QLSupportedContentTypes:
+              - org.hancom.hwpx
+              - com.haansoft.hancomofficeviewer.mac.hwpx
+            QLThumbnailMinimumDimension: 64
+          NSExtensionPointIdentifier: com.apple.quicklook.thumbnail
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).HWPXThumbnailProvider
+    entitlements:
+      path: HWPXThumbnailExtension/HWPXThumbnailExtension.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.application-groups:
+          - group.com.findermd.shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.findermd.app.hwpx-thumbnail
+        LD_RUNPATH_SEARCH_PATHS:
+          - $(inherited)
+          - "@executable_path/../Frameworks"
+          - "@executable_path/../../../../Frameworks"
+    dependencies:
+      - package: HWPXShared
+      - package: MarkdownShared
+
 schemes:
   FinderMD:
     build:
@@ -134,6 +229,8 @@ schemes:
         FinderMD: all
         QuickLookExtension: all
         ThumbnailExtension: all
+        HWPXQuickLookExtension: all
+        HWPXThumbnailExtension: all
     run:
       config: Debug
     test:

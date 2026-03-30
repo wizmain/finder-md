@@ -13,11 +13,20 @@
 		2F43BEEEE2A01B9DFDB4CB59 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF4F19274ACC923062DE0FFF /* ContentView.swift */; };
 		348ECCC8A9A213526EA7EB92 /* ThumbnailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55994B1C5D8B5559071B0058 /* ThumbnailProvider.swift */; };
 		3B276B3868EB0ABB747DE248 /* FontSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0937D8E30AD06B5850F71E82 /* FontSettingsView.swift */; };
+		3B4E129588C711A45AD6EA19 /* MarkdownShared in Frameworks */ = {isa = PBXBuildFile; productRef = B7592DEA35312CF1FAFC11F2 /* MarkdownShared */; };
+		3F0B2EE01FCA892461DDCC53 /* HWPXThumbnailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767C97CBE9F32DB59E31C824 /* HWPXThumbnailProvider.swift */; };
 		4B8D4F38BC94D4E10AE80FB9 /* ThumbnailExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CE470A1F22FC6F8710654390 /* ThumbnailExtension.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		500922AC8ADB63B1E3784873 /* HWPXThumbnailExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A78C073F0949257597F69FC7 /* HWPXThumbnailExtension.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		559CD285503F42E24582D654 /* MarkdownShared in Frameworks */ = {isa = PBXBuildFile; productRef = 7D8154FA13F173BA91BC7FC8 /* MarkdownShared */; };
 		5DA738FE4CEF86F772EEB0FA /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7DDADA5F05AF9795F9C48CA /* AppSettings.swift */; };
+		688D94FDD74E4071A1525F3E /* HWPXQuickLookExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 11A4EF16DFFE2D71052DF3AC /* HWPXQuickLookExtension.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6EFDBAA48288686D94C0949D /* MarkdownShared in Frameworks */ = {isa = PBXBuildFile; productRef = 0413ED6DAF935DDD8FE762BD /* MarkdownShared */; };
 		7C7B2BFC154A34F239104136 /* QuickLookExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C28A4726881D9608DC88CFEB /* QuickLookExtension.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7E39242663B3A43DF04A9649 /* HWPXShared in Frameworks */ = {isa = PBXBuildFile; productRef = 5C6B46918125B931CA47580F /* HWPXShared */; };
 		8049D3532EA7A1FC992E6D2D /* ExtensionStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240FC258E3F09BE9069741FD /* ExtensionStatusView.swift */; };
+		8CD3C92DCDD72EED228A1A7E /* HWPXPreviewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFC6FC06C6CFDFCFBB369CE /* HWPXPreviewProvider.swift */; };
+		920A0E72C57E84D5051F03FB /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CADBA398014672D2605600EA /* Quartz.framework */; };
+		AD726B35BE945449E041351D /* HWPXShared in Frameworks */ = {isa = PBXBuildFile; productRef = 5E1D13CAF7541DC1289BDDE1 /* HWPXShared */; };
 		B3ADFDB903A59052F07DCE54 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7220D2C68FA233D6CF0917 /* PreviewViewController.swift */; };
 		D1B1D90ABC64A87E7742B980 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CADBA398014672D2605600EA /* Quartz.framework */; };
 		D33000B1D90D2599855E83C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BCB26E9D2D4292F3E688669F /* Assets.xcassets */; };
@@ -33,12 +42,26 @@
 			remoteGlobalIDString = D8F0C177B022270F6FA041A2;
 			remoteInfo = QuickLookExtension;
 		};
+		3B22E6695D0B98F81E950518 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6842D69833255521C3A45C4F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0904595B0C3199351C08707B;
+			remoteInfo = HWPXThumbnailExtension;
+		};
 		8CB17FBCB9452E04AD443A8A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6842D69833255521C3A45C4F /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 2B3CFA6F0F8A04B3D5ADE41A;
 			remoteInfo = ThumbnailExtension;
+		};
+		8DF8B3512EBD4BCA4AD68357 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6842D69833255521C3A45C4F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B2B76B541F67F21D1B256F96;
+			remoteInfo = HWPXQuickLookExtension;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -51,6 +74,8 @@
 			files = (
 				7C7B2BFC154A34F239104136 /* QuickLookExtension.appex in Embed Foundation Extensions */,
 				4B8D4F38BC94D4E10AE80FB9 /* ThumbnailExtension.appex in Embed Foundation Extensions */,
+				688D94FDD74E4071A1525F3E /* HWPXQuickLookExtension.appex in Embed Foundation Extensions */,
+				500922AC8ADB63B1E3784873 /* HWPXThumbnailExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -60,19 +85,26 @@
 /* Begin PBXFileReference section */
 		0937D8E30AD06B5850F71E82 /* FontSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontSettingsView.swift; sourceTree = "<group>"; };
 		0B7220D2C68FA233D6CF0917 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
+		11A4EF16DFFE2D71052DF3AC /* HWPXQuickLookExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HWPXQuickLookExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		240FC258E3F09BE9069741FD /* ExtensionStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionStatusView.swift; sourceTree = "<group>"; };
 		3C5652593496F8816C74C27E /* FinderMDApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinderMDApp.swift; sourceTree = "<group>"; };
 		521027EC1B2371DDADCC92CB /* FinderMD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FinderMD.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		55994B1C5D8B5559071B0058 /* ThumbnailProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailProvider.swift; sourceTree = "<group>"; };
+		5B32C4E753E2D7AF44863923 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5D2360C503D5A7FF5720FA7A /* MarkdownShared */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MarkdownShared; path = MarkdownShared; sourceTree = SOURCE_ROOT; };
+		5DFC6FC06C6CFDFCFBB369CE /* HWPXPreviewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HWPXPreviewProvider.swift; sourceTree = "<group>"; };
 		68BDAFCFB5A3A6101AED6ECB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		767C97CBE9F32DB59E31C824 /* HWPXThumbnailProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HWPXThumbnailProvider.swift; sourceTree = "<group>"; };
 		8F2605DE6FB4ADD71B0B747B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8F48AB76CF9672FA4935E9DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		A0983966C30B2926236C6C8A /* ThemeSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSettingsView.swift; sourceTree = "<group>"; };
+		A78C073F0949257597F69FC7 /* HWPXThumbnailExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HWPXThumbnailExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF4F19274ACC923062DE0FFF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B7DDADA5F05AF9795F9C48CA /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		BCB26E9D2D4292F3E688669F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C1E934B47E68FD7295C24D73 /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
 		C28A4726881D9608DC88CFEB /* QuickLookExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickLookExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA1D8B415BC29A9075566655 /* HWPXShared */ = {isa = PBXFileReference; lastKnownFileType = folder; name = HWPXShared; path = HWPXShared; sourceTree = SOURCE_ROOT; };
 		CADBA398014672D2605600EA /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		CE470A1F22FC6F8710654390 /* ThumbnailExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ThumbnailExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6DF8B1EC5C0D6100601C9B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -92,6 +124,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				559CD285503F42E24582D654 /* MarkdownShared in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A57E8CE8333F720C8331C954 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD726B35BE945449E041351D /* HWPXShared in Frameworks */,
+				6EFDBAA48288686D94C0949D /* MarkdownShared in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E0B49481BDA4128CEED56C4C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7E39242663B3A43DF04A9649 /* HWPXShared in Frameworks */,
+				3B4E129588C711A45AD6EA19 /* MarkdownShared in Frameworks */,
+				920A0E72C57E84D5051F03FB /* Quartz.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,6 +188,8 @@
 			isa = PBXGroup;
 			children = (
 				A88848637EA82683AB82AFCE /* FinderMD */,
+				DE519A7F5FF0584E77694F24 /* HWPXQuickLookExtension */,
+				CD22AD93D51FC8A8FE972942 /* HWPXThumbnailExtension */,
 				E3D41580732FA042CF4FA6FD /* Packages */,
 				4EBFEA7B56A2D5E36F7B25A2 /* QuickLookExtension */,
 				8ED5C0EE1B52E630462A1754 /* ThumbnailExtension */,
@@ -149,6 +202,8 @@
 			isa = PBXGroup;
 			children = (
 				521027EC1B2371DDADCC92CB /* FinderMD.app */,
+				11A4EF16DFFE2D71052DF3AC /* HWPXQuickLookExtension.appex */,
+				A78C073F0949257597F69FC7 /* HWPXThumbnailExtension.appex */,
 				C28A4726881D9608DC88CFEB /* QuickLookExtension.appex */,
 				CE470A1F22FC6F8710654390 /* ThumbnailExtension.appex */,
 			);
@@ -187,9 +242,28 @@
 			path = FinderMD;
 			sourceTree = "<group>";
 		};
+		CD22AD93D51FC8A8FE972942 /* HWPXThumbnailExtension */ = {
+			isa = PBXGroup;
+			children = (
+				767C97CBE9F32DB59E31C824 /* HWPXThumbnailProvider.swift */,
+				8F48AB76CF9672FA4935E9DA /* Info.plist */,
+			);
+			path = HWPXThumbnailExtension;
+			sourceTree = "<group>";
+		};
+		DE519A7F5FF0584E77694F24 /* HWPXQuickLookExtension */ = {
+			isa = PBXGroup;
+			children = (
+				5DFC6FC06C6CFDFCFBB369CE /* HWPXPreviewProvider.swift */,
+				5B32C4E753E2D7AF44863923 /* Info.plist */,
+			);
+			path = HWPXQuickLookExtension;
+			sourceTree = "<group>";
+		};
 		E3D41580732FA042CF4FA6FD /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				CA1D8B415BC29A9075566655 /* HWPXShared */,
 				5D2360C503D5A7FF5720FA7A /* MarkdownShared */,
 			);
 			name = Packages;
@@ -206,6 +280,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		0904595B0C3199351C08707B /* HWPXThumbnailExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7FE63564603FA79A9DDB1A61 /* Build configuration list for PBXNativeTarget "HWPXThumbnailExtension" */;
+			buildPhases = (
+				C479D03156DAEF7B0AD90430 /* Sources */,
+				A57E8CE8333F720C8331C954 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HWPXThumbnailExtension;
+			packageProductDependencies = (
+				5E1D13CAF7541DC1289BDDE1 /* HWPXShared */,
+				0413ED6DAF935DDD8FE762BD /* MarkdownShared */,
+			);
+			productName = HWPXThumbnailExtension;
+			productReference = A78C073F0949257597F69FC7 /* HWPXThumbnailExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		2B3CFA6F0F8A04B3D5ADE41A /* ThumbnailExtension */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 59F6DB253840B33CA49B0225 /* Build configuration list for PBXNativeTarget "ThumbnailExtension" */;
@@ -223,6 +317,26 @@
 			);
 			productName = ThumbnailExtension;
 			productReference = CE470A1F22FC6F8710654390 /* ThumbnailExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		B2B76B541F67F21D1B256F96 /* HWPXQuickLookExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C47801838C85730D6CEE63A1 /* Build configuration list for PBXNativeTarget "HWPXQuickLookExtension" */;
+			buildPhases = (
+				691B26AF54DCE25926EA6385 /* Sources */,
+				E0B49481BDA4128CEED56C4C /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HWPXQuickLookExtension;
+			packageProductDependencies = (
+				5C6B46918125B931CA47580F /* HWPXShared */,
+				B7592DEA35312CF1FAFC11F2 /* MarkdownShared */,
+			);
+			productName = HWPXQuickLookExtension;
+			productReference = 11A4EF16DFFE2D71052DF3AC /* HWPXQuickLookExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		D8F0C177B022270F6FA041A2 /* QuickLookExtension */ = {
@@ -258,6 +372,8 @@
 			dependencies = (
 				519B95CAAF24E8D4F8F0BFC8 /* PBXTargetDependency */,
 				CC204A6984EBFCE19E7AADF0 /* PBXTargetDependency */,
+				21842F5226230ABEBDCB5571 /* PBXTargetDependency */,
+				E36FFC2D9FDCE6EA414D4B52 /* PBXTargetDependency */,
 			);
 			name = FinderMD;
 			packageProductDependencies = (
@@ -276,7 +392,15 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
+					0904595B0C3199351C08707B = {
+						DevelopmentTeam = 23VMB3S28N;
+						ProvisioningStyle = Automatic;
+					};
 					2B3CFA6F0F8A04B3D5ADE41A = {
+						DevelopmentTeam = 23VMB3S28N;
+						ProvisioningStyle = Automatic;
+					};
+					B2B76B541F67F21D1B256F96 = {
 						DevelopmentTeam = 23VMB3S28N;
 						ProvisioningStyle = Automatic;
 					};
@@ -301,6 +425,7 @@
 			mainGroup = 82CFFF69EF891EED14085DE8;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				4E3F7A52BAB4926D488E04F6 /* XCLocalSwiftPackageReference "HWPXShared" */,
 				7D4AD5F55D680A7B4465878F /* XCLocalSwiftPackageReference "MarkdownShared" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -308,6 +433,8 @@
 			projectRoot = "";
 			targets = (
 				E234FC811CDC9608220B2241 /* FinderMD */,
+				B2B76B541F67F21D1B256F96 /* HWPXQuickLookExtension */,
+				0904595B0C3199351C08707B /* HWPXThumbnailExtension */,
 				D8F0C177B022270F6FA041A2 /* QuickLookExtension */,
 				2B3CFA6F0F8A04B3D5ADE41A /* ThumbnailExtension */,
 			);
@@ -348,6 +475,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		691B26AF54DCE25926EA6385 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8CD3C92DCDD72EED228A1A7E /* HWPXPreviewProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		897D4281F5BB238FA4000F3F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -356,9 +491,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C479D03156DAEF7B0AD90430 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F0B2EE01FCA892461DDCC53 /* HWPXThumbnailProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		21842F5226230ABEBDCB5571 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B2B76B541F67F21D1B256F96 /* HWPXQuickLookExtension */;
+			targetProxy = 8DF8B3512EBD4BCA4AD68357 /* PBXContainerItemProxy */;
+		};
 		519B95CAAF24E8D4F8F0BFC8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D8F0C177B022270F6FA041A2 /* QuickLookExtension */;
@@ -368,6 +516,11 @@
 			isa = PBXTargetDependency;
 			target = 2B3CFA6F0F8A04B3D5ADE41A /* ThumbnailExtension */;
 			targetProxy = 8CB17FBCB9452E04AD443A8A /* PBXContainerItemProxy */;
+		};
+		E36FFC2D9FDCE6EA414D4B52 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0904595B0C3199351C08707B /* HWPXThumbnailExtension */;
+			targetProxy = 3B22E6695D0B98F81E950518 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -403,6 +556,38 @@
 				SDKROOT = macosx;
 			};
 			name = Debug;
+		};
+		5657AA0A7740ADF2CEEBA621 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = HWPXQuickLookExtension/HWPXQuickLookExtension.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = HWPXQuickLookExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.findermd.app.hwpx-quicklook";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		6FA3FBA904AB13A6A0D215F8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = HWPXThumbnailExtension/HWPXThumbnailExtension.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = HWPXThumbnailExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.findermd.app.hwpx-thumbnail";
+				SDKROOT = macosx;
+			};
+			name = Release;
 		};
 		7C18E2176ED82DFDF998709C /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -468,6 +653,22 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.10;
+			};
+			name = Debug;
+		};
+		8E60FE0CF4D5283354E0463D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = HWPXThumbnailExtension/HWPXThumbnailExtension.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = HWPXThumbnailExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.findermd.app.hwpx-thumbnail";
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -563,6 +764,22 @@
 			};
 			name = Release;
 		};
+		CAD7C95CDE5A4A7E0B0E0740 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = HWPXQuickLookExtension/HWPXQuickLookExtension.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = HWPXQuickLookExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.findermd.app.hwpx-quicklook";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
 		D776FCAA8C170861462D4E92 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -625,6 +842,24 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		7FE63564603FA79A9DDB1A61 /* Build configuration list for PBXNativeTarget "HWPXThumbnailExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8E60FE0CF4D5283354E0463D /* Debug */,
+				6FA3FBA904AB13A6A0D215F8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C47801838C85730D6CEE63A1 /* Build configuration list for PBXNativeTarget "HWPXQuickLookExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5657AA0A7740ADF2CEEBA621 /* Debug */,
+				CAD7C95CDE5A4A7E0B0E0740 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		CE2A5072E54D974818939D6C /* Build configuration list for PBXProject "FinderMD" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -637,6 +872,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
+		4E3F7A52BAB4926D488E04F6 /* XCLocalSwiftPackageReference "HWPXShared" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = HWPXShared;
+		};
 		7D4AD5F55D680A7B4465878F /* XCLocalSwiftPackageReference "MarkdownShared" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = MarkdownShared;
@@ -644,6 +883,10 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0413ED6DAF935DDD8FE762BD /* MarkdownShared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MarkdownShared;
+		};
 		09C3A5AFF36B054624BCAE4E /* MarkdownShared */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MarkdownShared;
@@ -652,7 +895,19 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = MarkdownShared;
 		};
+		5C6B46918125B931CA47580F /* HWPXShared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = HWPXShared;
+		};
+		5E1D13CAF7541DC1289BDDE1 /* HWPXShared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = HWPXShared;
+		};
 		7D8154FA13F173BA91BC7FC8 /* MarkdownShared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MarkdownShared;
+		};
+		B7592DEA35312CF1FAFC11F2 /* MarkdownShared */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MarkdownShared;
 		};

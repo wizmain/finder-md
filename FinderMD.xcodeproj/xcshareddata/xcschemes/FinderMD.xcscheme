@@ -29,6 +29,34 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B2B76B541F67F21D1B256F96"
+               BuildableName = "HWPXQuickLookExtension.appex"
+               BlueprintName = "HWPXQuickLookExtension"
+               ReferencedContainer = "container:FinderMD.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "0904595B0C3199351C08707B"
+               BuildableName = "HWPXThumbnailExtension.appex"
+               BlueprintName = "HWPXThumbnailExtension"
+               ReferencedContainer = "container:FinderMD.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "D8F0C177B022270F6FA041A2"
                BuildableName = "QuickLookExtension.appex"
                BlueprintName = "QuickLookExtension"

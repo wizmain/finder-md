@@ -37,6 +37,14 @@ public struct RenderConfiguration: Sendable {
         enableMermaid: true,
         enableKaTeX: true
     )
+
+    /// Preset for HWPX document rendering (no code/math features needed).
+    public static let hwpxPreview = RenderConfiguration(
+        embedImages: true,
+        enableHighlightJS: false,
+        enableMermaid: false,
+        enableKaTeX: false
+    )
 }
 
 /// Errors that can occur during HTML rendering.
@@ -89,6 +97,20 @@ public struct HTMLRenderer {
             htmlBody = convertMermaidBlocks(in: htmlBody)
         }
 
+        return try renderHTMLBody(htmlBody, title: parsed.title ?? "Markdown Preview", configuration: configuration)
+    }
+
+    /// Wraps an arbitrary HTML body string in the full document template with themes and JS libraries.
+    /// - Parameters:
+    ///   - htmlBody: The inner HTML content to place in the document body.
+    ///   - title: The document title. Defaults to "Preview".
+    ///   - configuration: Rendering options controlling which JS/CSS features are included.
+    /// - Returns: A complete, self-contained HTML document string.
+    public func renderHTMLBody(
+        _ htmlBody: String,
+        title: String? = nil,
+        configuration: RenderConfiguration = .quickLook
+    ) throws -> String {
         // Load the template
         let template = try loadTemplate()
 
@@ -98,7 +120,7 @@ public struct HTMLRenderer {
 
         // Build the document
         var html = template
-        html = html.replacingOccurrences(of: "{{TITLE}}", with: escapeHTML(parsed.title ?? "Markdown Preview"))
+        html = html.replacingOccurrences(of: "{{TITLE}}", with: escapeHTML(title ?? "Preview"))
         html = html.replacingOccurrences(of: "{{THEME_CSS}}", with: themeCSS)
         html = html.replacingOccurrences(of: "{{BODY}}", with: htmlBody)
 

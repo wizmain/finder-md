@@ -24,5 +24,29 @@
 	<string>public.app-category.utilities</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>HWPX Document</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.hancom.hwpx</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>hwpx</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/haansofthwpx</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>
