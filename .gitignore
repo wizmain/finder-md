@@ -1,3 +1,14 @@
 # Worktrees
 agent-*/
 PROGRESS_CLAUDE_CODE.md
+
+# macOS
+.DS_Store
+
+# SPM
+.build/
+.swiftpm/
+
+# Xcode
+xcuserdata/
+*.xcscmblueprint
