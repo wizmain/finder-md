@@ -25,9 +25,14 @@ final class HWPXThumbnailProvider: QLThumbnailProvider {
         let (title, bodyText) = Self.extractTextPreview(fileURL: fileURL)
         let isDark = Self.resolveIsDark()
 
-        let reply = QLThumbnailReply(contextSize: size) { context in
-            Self.draw(in: context, size: size, title: title, body: bodyText, isDark: isDark)
-        }
+        let reply = QLThumbnailReply(contextSize: size, currentContextDrawing: {
+            Self.draw(
+                size: size,
+                title: title,
+                body: bodyText,
+                isDark: isDark
+            )
+        })
 
         handler(reply, nil)
     }
@@ -37,34 +42,65 @@ final class HWPXThumbnailProvider: QLThumbnailProvider {
     private static func replyFromPreviewImage(fileURL: URL, size: CGSize) -> QLThumbnailReply? {
         guard let archive = try? HWPXArchive(fileURL: fileURL),
               let imageData = archive.previewImage(),
-              let image = NSImage(data: imageData) else {
+              let previewImage = NSImage(data: imageData) else {
             return nil
         }
 
-        return QLThumbnailReply(contextSize: size) { context in
-            let nsContext = NSGraphicsContext(cgContext: context, flipped: false)
-            NSGraphicsContext.current = nsContext
+        return QLThumbnailReply(contextSize: size, currentContextDrawing: {
+            guard NSGraphicsContext.current != nil else { return false }
 
-            // White background
-            context.setFillColor(NSColor.white.cgColor)
-            context.fill(CGRect(origin: .zero, size: size))
+            let backgroundColor = NSColor.white
+            let shadowColor = NSColor.black.withAlphaComponent(0.08)
 
-            // Aspect-fit the preview image centered in the thumbnail
-            let imageSize = image.size
-            let scaleX = size.width / imageSize.width
-            let scaleY = size.height / imageSize.height
-            let scale = min(scaleX, scaleY)
-            let drawWidth = imageSize.width * scale
-            let drawHeight = imageSize.height * scale
-            let drawRect = CGRect(
-                x: (size.width - drawWidth) / 2,
-                y: (size.height - drawHeight) / 2,
-                width: drawWidth,
-                height: drawHeight
+            backgroundColor.setFill()
+            NSBezierPath.fill(CGRect(origin: .zero, size: size))
+
+            let outerPadding = max(8, min(size.width, size.height) * 0.08)
+            let availableRect = CGRect(
+                x: outerPadding,
+                y: outerPadding,
+                width: max(1, size.width - outerPadding * 2),
+                height: max(1, size.height - outerPadding * 2)
             )
-            image.draw(in: drawRect, from: .zero, operation: .copy, fraction: 1.0)
+
+            let imageSize = previewImage.size
+            guard imageSize.width > 0, imageSize.height > 0 else { return false }
+
+            let scale = min(
+                availableRect.width / imageSize.width,
+                availableRect.height / imageSize.height
+            )
+            let drawSize = CGSize(
+                width: imageSize.width * scale,
+                height: imageSize.height * scale
+            )
+            let drawRect = CGRect(
+                x: availableRect.midX - drawSize.width / 2,
+                y: availableRect.midY - drawSize.height / 2,
+                width: drawSize.width,
+                height: drawSize.height
+            )
+
+            let shadow = NSShadow()
+            shadow.shadowColor = shadowColor
+            shadow.shadowBlurRadius = max(4, min(size.width, size.height) * 0.03)
+            shadow.shadowOffset = CGSize(width: 0, height: -1)
+
+            NSGraphicsContext.saveGraphicsState()
+            shadow.set()
+            NSColor.white.setFill()
+            NSBezierPath.fill(drawRect)
+            NSGraphicsContext.restoreGraphicsState()
+
+            previewImage.draw(
+                in: drawRect,
+                from: .zero,
+                operation: .sourceOver,
+                fraction: 1
+            )
+
             return true
-        }
+        })
     }
 
     // MARK: - Text Extraction Fallback
@@ -98,18 +134,12 @@ final class HWPXThumbnailProvider: QLThumbnailProvider {
     // MARK: - Drawing
 
     private static func draw(
-        in context: CGContext,
         size: CGSize,
         title: String,
         body: String,
         isDark: Bool
     ) -> Bool {
-        context.saveGState()
-        context.translateBy(x: 0, y: size.height)
-        context.scaleBy(x: 1, y: -1)
-
-        let nsContext = NSGraphicsContext(cgContext: context, flipped: true)
-        NSGraphicsContext.current = nsContext
+        guard NSGraphicsContext.current != nil else { return false }
 
         let bgColor: NSColor
         let titleColor: NSColor
@@ -147,7 +177,10 @@ final class HWPXThumbnailProvider: QLThumbnailProvider {
         ]
         let badgeStr = NSAttributedString(string: "HWP", attributes: badgeAttrs)
         let badgeSize = badgeStr.size()
-        let badgeOrigin = CGPoint(x: size.width - padding - badgeSize.width, y: padding * 0.7)
+        let badgeOrigin = CGPoint(
+            x: size.width - padding - badgeSize.width,
+            y: size.height - (padding * 0.7) - badgeSize.height
+        )
         badgeStr.draw(at: badgeOrigin)
 
         var yOffset = padding
@@ -163,7 +196,13 @@ final class HWPXThumbnailProvider: QLThumbnailProvider {
             .paragraphStyle: titleParagraph,
         ]
         let titleHeight = titleFontSize * 2.6
-        let titleRect = CGRect(x: padding, y: yOffset, width: contentWidth, height: titleHeight)
+        let titleRect = rectFromTop(
+            x: padding,
+            y: yOffset,
+            width: contentWidth,
+            height: titleHeight,
+            canvasHeight: size.height
+        )
         let titleAttrStr = NSAttributedString(string: title, attributes: titleAttrs)
         titleAttrStr.draw(with: titleRect, options: [.usesLineFragmentOrigin, .truncatesLastVisibleLine])
 
@@ -172,8 +211,9 @@ final class HWPXThumbnailProvider: QLThumbnailProvider {
         // Separator
         separatorColor.setStroke()
         let line = NSBezierPath()
-        line.move(to: CGPoint(x: padding, y: yOffset))
-        line.line(to: CGPoint(x: size.width - padding, y: yOffset))
+        let lineY = size.height - yOffset
+        line.move(to: CGPoint(x: padding, y: lineY))
+        line.line(to: CGPoint(x: size.width - padding, y: lineY))
         line.lineWidth = max(0.5, size.height * 0.003)
         line.stroke()
 
@@ -190,16 +230,16 @@ final class HWPXThumbnailProvider: QLThumbnailProvider {
             .foregroundColor: bodyColor,
             .paragraphStyle: bodyParagraph,
         ]
-        let bodyRect = CGRect(
+        let bodyRect = rectFromTop(
             x: padding,
             y: yOffset,
             width: contentWidth,
-            height: size.height - yOffset - padding
+            height: size.height - yOffset - padding,
+            canvasHeight: size.height
         )
         let bodyAttrStr = NSAttributedString(string: body, attributes: bodyAttrs)
         bodyAttrStr.draw(with: bodyRect, options: [.usesLineFragmentOrigin, .truncatesLastVisibleLine])
 
-        context.restoreGState()
         return true
     }
 
@@ -212,5 +252,15 @@ final class HWPXThumbnailProvider: QLThumbnailProvider {
             return theme.isDark
         }
         return ThemeManager.systemIsDarkMode
+    }
+
+    private static func rectFromTop(
+        x: CGFloat,
+        y: CGFloat,
+        width: CGFloat,
+        height: CGFloat,
+        canvasHeight: CGFloat
+    ) -> CGRect {
+        CGRect(x: x, y: canvasHeight - y - height, width: width, height: height)
     }
 }

@@ -32,15 +32,14 @@ final class ThumbnailProvider: QLThumbnailProvider {
         let bodyText = Self.stripHTMLTags(from: parsed.html)
         let isDark = Self.resolveIsDark()
 
-        let reply = QLThumbnailReply(contextSize: size) { context in
+        let reply = QLThumbnailReply(contextSize: size, currentContextDrawing: {
             Self.draw(
-                in: context,
                 size: size,
                 title: title,
                 body: bodyText,
                 isDark: isDark
             )
-        }
+        })
 
         handler(reply, nil)
     }
@@ -48,19 +47,12 @@ final class ThumbnailProvider: QLThumbnailProvider {
     // MARK: - Drawing
 
     private static func draw(
-        in context: CGContext,
         size: CGSize,
         title: String,
         body: String,
         isDark: Bool
     ) -> Bool {
-        // Flip coordinate system for AppKit text drawing (origin top-left)
-        context.saveGState()
-        context.translateBy(x: 0, y: size.height)
-        context.scaleBy(x: 1, y: -1)
-
-        let nsContext = NSGraphicsContext(cgContext: context, flipped: true)
-        NSGraphicsContext.current = nsContext
+        guard NSGraphicsContext.current != nil else { return false }
 
         // Theme colors (GitHub Light / GitHub Dark)
         let bgColor: NSColor
@@ -99,7 +91,10 @@ final class ThumbnailProvider: QLThumbnailProvider {
         ]
         let badgeStr = NSAttributedString(string: "MD", attributes: badgeAttrs)
         let badgeSize = badgeStr.size()
-        let badgeOrigin = CGPoint(x: size.width - padding - badgeSize.width, y: padding * 0.7)
+        let badgeOrigin = CGPoint(
+            x: size.width - padding - badgeSize.width,
+            y: size.height - (padding * 0.7) - badgeSize.height
+        )
         badgeStr.draw(at: badgeOrigin)
 
         var yOffset = padding
@@ -115,7 +110,13 @@ final class ThumbnailProvider: QLThumbnailProvider {
             .paragraphStyle: titleParagraph,
         ]
         let titleHeight = titleFontSize * 2.6
-        let titleRect = CGRect(x: padding, y: yOffset, width: contentWidth, height: titleHeight)
+        let titleRect = rectFromTop(
+            x: padding,
+            y: yOffset,
+            width: contentWidth,
+            height: titleHeight,
+            canvasHeight: size.height
+        )
         let titleAttrStr = NSAttributedString(string: title, attributes: titleAttrs)
         titleAttrStr.draw(with: titleRect, options: [.usesLineFragmentOrigin, .truncatesLastVisibleLine])
 
@@ -124,8 +125,9 @@ final class ThumbnailProvider: QLThumbnailProvider {
         // Separator line
         separatorColor.setStroke()
         let line = NSBezierPath()
-        line.move(to: CGPoint(x: padding, y: yOffset))
-        line.line(to: CGPoint(x: size.width - padding, y: yOffset))
+        let lineY = size.height - yOffset
+        line.move(to: CGPoint(x: padding, y: lineY))
+        line.line(to: CGPoint(x: size.width - padding, y: lineY))
         line.lineWidth = max(0.5, size.height * 0.003)
         line.stroke()
 
@@ -142,16 +144,16 @@ final class ThumbnailProvider: QLThumbnailProvider {
             .foregroundColor: bodyColor,
             .paragraphStyle: bodyParagraph,
         ]
-        let bodyRect = CGRect(
+        let bodyRect = rectFromTop(
             x: padding,
             y: yOffset,
             width: contentWidth,
-            height: size.height - yOffset - padding
+            height: size.height - yOffset - padding,
+            canvasHeight: size.height
         )
         let bodyAttrStr = NSAttributedString(string: body, attributes: bodyAttrs)
         bodyAttrStr.draw(with: bodyRect, options: [.usesLineFragmentOrigin, .truncatesLastVisibleLine])
 
-        context.restoreGState()
         return true
     }
 
@@ -187,5 +189,15 @@ final class ThumbnailProvider: QLThumbnailProvider {
         text = text.replacingOccurrences(of: "&nbsp;", with: " ")
         text = text.replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression)
         return text.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private static func rectFromTop(
+        x: CGFloat,
+        y: CGFloat,
+        width: CGFloat,
+        height: CGFloat,
+        canvasHeight: CGFloat
+    ) -> CGRect {
+        CGRect(x: x, y: canvasHeight - y - height, width: width, height: height)
     }
 }

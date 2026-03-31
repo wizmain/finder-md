@@ -22,6 +22,7 @@ macOS Finder Quick Look extension for beautifully rendered Markdown and HWPX doc
 - **4 Themes** — github-light, github-dark, dracula, nord
 - **Dark Mode** — automatically follows system appearance
 - **Thumbnail Generation** — file thumbnails in Finder
+- **Centered Finder Preview Pane Thumbnails** — Markdown and HWPX thumbnails render correctly in Finder's right-side preview pane
 
 ## System Requirements
 
@@ -126,11 +127,15 @@ swift test --package-path HWPXShared
 
 1. Build and run the app from Xcode
 2. Open Finder and navigate to a `.md` or `.hwpx` file
-3. Press **Spacebar** to trigger Quick Look preview
+3. Test both:
+   - **Spacebar Quick Look** for the full preview
+   - **Finder right-side preview pane** (`View -> Show Preview`) for the generated thumbnail
+4. Verify thumbnails are centered correctly and not shifted toward the lower-left corner
 
 To force-reload after rebuilding:
 ```bash
 qlmanage -r
+qlmanage -r cache
 killall Finder
 ```
 

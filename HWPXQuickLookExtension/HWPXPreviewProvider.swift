@@ -15,7 +15,7 @@ final class HWPXPreviewProvider: QLPreviewProvider, QLPreviewingController {
         do {
             let html = try hwpxParser.renderToFullHTML(fileURL: request.fileURL, configuration: configuration)
             let data = Data(html.utf8)
-            let reply = QLPreviewReply(dataOfContentType: UTType.html, contentSize: CGSize(width: 800, height: 1200)) { _ in
+            let reply = QLPreviewReply(dataOfContentType: UTType.html, contentSize: .zero) { _ in
                 return data
             }
             reply.stringEncoding = String.Encoding.utf8
