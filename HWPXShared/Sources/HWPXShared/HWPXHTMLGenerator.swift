@@ -54,13 +54,14 @@ public struct HWPXHTMLGenerator {
     }
 
     private func renderRun(_ run: HWPXRun, styles: HWPXStyleSheet, images: [String: Data]) -> String {
-        // Image run
+        // Image run — skip page background images
         if let imageRef = run.imageRef {
-            return renderImage(imageRef, images: images)
+            if run.isPageBackground { return "" }
+            return renderImage(imageRef, images: images, widthPercent: run.imageWidthPercent)
         }
 
-        let text = escapeHTML(run.text)
-        if text.isEmpty { return "" }
+        let text = escapeHTML(run.text).replacingOccurrences(of: "\n", with: "<br>\n")
+        if text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty { return "" }
 
         // Apply character styling
         guard let charRef = run.charStyleRef, let charPr = styles.charProperties[charRef] else {
@@ -94,12 +95,18 @@ public struct HWPXHTMLGenerator {
         return result
     }
 
-    private func renderImage(_ ref: String, images: [String: Data]) -> String {
+    private func renderImage(_ ref: String, images: [String: Data], widthPercent: Double = 0) -> String {
         let filename = ref.hasPrefix("BinData/") ? String(ref.dropFirst("BinData/".count)) : ref
         if let data = images[filename] ?? images[ref] {
             let mime = mimeType(for: filename, data: data)
             let base64 = data.base64EncodedString()
-            return "<img src=\"data:\(mime);base64,\(base64)\" style=\"max-width:100%;height:auto;\">\n"
+            let widthStyle: String
+            if widthPercent > 0 && widthPercent < 100 {
+                widthStyle = "width:\(String(format: "%.1f", widthPercent))%;height:auto;"
+            } else {
+                widthStyle = "max-width:100%;height:auto;"
+            }
+            return "<img src=\"data:\(mime);base64,\(base64)\" style=\"\(widthStyle)\">\n"
         }
         return "<p>[Image: \(escapeHTML(filename))]</p>\n"
     }

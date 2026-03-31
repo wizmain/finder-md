@@ -73,7 +73,7 @@ public struct HWPXParagraph {
     }
 
     public var isEmpty: Bool {
-        runs.allSatisfy { $0.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+        runs.allSatisfy { $0.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && $0.imageRef == nil }
     }
 }
 
@@ -82,11 +82,18 @@ public struct HWPXRun {
     public var text: String
     public var charStyleRef: Int?
     public var imageRef: String?
+    /// Whether this image is a page-sized background (should be skipped in rendering).
+    public var isPageBackground: Bool
+    /// Image display width as percentage of page width (0 means unknown, use default).
+    public var imageWidthPercent: Double
 
-    public init(text: String = "", charStyleRef: Int? = nil, imageRef: String? = nil) {
+    public init(text: String = "", charStyleRef: Int? = nil, imageRef: String? = nil,
+                isPageBackground: Bool = false, imageWidthPercent: Double = 0) {
         self.text = text
         self.charStyleRef = charStyleRef
         self.imageRef = imageRef
+        self.isPageBackground = isPageBackground
+        self.imageWidthPercent = imageWidthPercent
     }
 }
 

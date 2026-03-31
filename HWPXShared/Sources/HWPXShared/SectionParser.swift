@@ -21,6 +21,12 @@ public final class SectionParser: NSObject {
     // Image state
     private var currentImageRef: String?
     private var isInsidePic = false
+    private var picCurWidth: Int = 0
+    private var picCurHeight: Int = 0
+
+    // Page dimensions (parsed from secPr/pagePr)
+    private var pageWidth: Int = 0
+    private var pageHeight: Int = 0
 
     private var parserError: Error?
 
@@ -46,6 +52,10 @@ public final class SectionParser: NSObject {
         tableStack = []
         currentImageRef = nil
         isInsidePic = false
+        picCurWidth = 0
+        picCurHeight = 0
+        pageWidth = 0
+        pageHeight = 0
         parserError = nil
 
         let parser = XMLParser(data: data)
@@ -97,6 +107,21 @@ public final class SectionParser: NSObject {
             }
         }
         currentParagraph = nil
+    }
+
+    /// Detect if the current pic element is a page-sized background image.
+    /// Compares curSz dimensions against pagePr dimensions (within 5% tolerance).
+    private func isPageBackgroundImage() -> Bool {
+        guard pageWidth > 0, pageHeight > 0, picCurWidth > 0, picCurHeight > 0 else { return false }
+        let widthRatio = Double(picCurWidth) / Double(pageWidth)
+        let heightRatio = Double(picCurHeight) / Double(pageHeight)
+        return widthRatio > 0.95 && heightRatio > 0.95
+    }
+
+    /// Compute image display width as a percentage of page width.
+    private func imageWidthPercent() -> Double {
+        guard pageWidth > 0, picCurWidth > 0 else { return 0 }
+        return Double(picCurWidth) / Double(pageWidth) * 100.0
     }
 
     private func localName(from qualifiedName: String) -> String {
@@ -155,6 +180,19 @@ extension SectionParser: XMLParserDelegate {
 
         case "pic":
             isInsidePic = true
+            picCurWidth = 0
+            picCurHeight = 0
+
+        case "curSz":
+            if isInsidePic {
+                picCurWidth = attributes["width"].flatMap(Int.init) ?? 0
+                picCurHeight = attributes["height"].flatMap(Int.init) ?? 0
+            }
+
+        case "pagePr":
+            // Capture page dimensions for background image detection
+            if let w = attributes["width"].flatMap(Int.init) { pageWidth = w }
+            if let h = attributes["height"].flatMap(Int.init) { pageHeight = h }
 
         case "binItem":
             if isInsidePic, let src = attributes["src"] {
@@ -167,6 +205,23 @@ extension SectionParser: XMLParserDelegate {
                 currentImageRef = ref
             } else if let src = attributes["src"] {
                 currentImageRef = src
+            }
+
+        case "cellSpan":
+            // Real HWPX files use <cellSpan colSpan="N" rowSpan="N"/> as child of <tc>
+            if !tableStack.isEmpty, tableStack[tableStack.count - 1].cell != nil {
+                if let cs = attributes["colSpan"].flatMap(Int.init), cs > 1 {
+                    tableStack[tableStack.count - 1].cell!.colSpan = cs
+                }
+                if let rs = attributes["rowSpan"].flatMap(Int.init), rs > 1 {
+                    tableStack[tableStack.count - 1].cell!.rowSpan = rs
+                }
+            }
+
+        case "lineBreak":
+            // Insert newline for <lineBreak/> inside <t>
+            if isInsideText {
+                currentText += "\n"
             }
 
         default:
@@ -212,13 +267,19 @@ extension SectionParser: XMLParserDelegate {
             }
 
         case "pic":
+            let isBackground = isPageBackgroundImage()
+            let widthPct = imageWidthPercent()
             if let imageRef = currentImageRef, var run = currentRun {
                 run.imageRef = imageRef
+                run.isPageBackground = isBackground
+                run.imageWidthPercent = widthPct
                 currentRun = run
             } else if let imageRef = currentImageRef {
                 // Image outside a run — create a synthetic run
                 var imgRun = HWPXRun()
                 imgRun.imageRef = imageRef
+                imgRun.isPageBackground = isBackground
+                imgRun.imageWidthPercent = widthPct
                 if var para = currentParagraph {
                     para.runs.append(imgRun)
                     currentParagraph = para
@@ -226,6 +287,8 @@ extension SectionParser: XMLParserDelegate {
             }
             isInsidePic = false
             currentImageRef = nil
+            picCurWidth = 0
+            picCurHeight = 0
 
         default:
             break
